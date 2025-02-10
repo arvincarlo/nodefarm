@@ -1,5 +1,7 @@
 const fs = require("fs");
 const http = require('http');
+const path = require("path");
+const url = require('url');
 
 ////////////////////////
 // FILES
@@ -35,7 +37,23 @@ const http = require('http');
 ////////////////////////
 // SERVER
 const server = http.createServer((request, response) => {
-    response.end('Hello from the server');
+    console.log(request.url);
+
+    const pathName = request.url;
+
+    if (pathName === '/' || pathName === '/overview') {
+        response.end("this is the overview")
+    } else if (pathName === "/product") {
+        response.end("this is the product")
+    } else {
+        response.writeHead(404, {
+            // Header - a piece of information about the response we are sending back
+            'Content-type': 'text/html',
+            'my-own-header': 'hello-world',
+        });
+        response.end("<h1>Page not Found!!</h1>")
+    }
+
 });
 
 server.listen(8000, '127.0.0.1', () => {
