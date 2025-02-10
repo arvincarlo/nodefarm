@@ -36,6 +36,9 @@ const url = require('url');
 
 ////////////////////////
 // SERVER
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8');
+const dataObj = JSON.parse(data);
+
 const server = http.createServer((request, response) => {
     console.log(request.url);
 
@@ -45,6 +48,9 @@ const server = http.createServer((request, response) => {
         response.end("this is the overview")
     } else if (pathName === "/product") {
         response.end("this is the product")
+    } else if (pathName === "/api") {
+        response.writeHead(200, {'Content-type': 'application/json'});
+        response.end(data);
     } else {
         response.writeHead(404, {
             // Header - a piece of information about the response we are sending back
