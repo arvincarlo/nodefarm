@@ -62,8 +62,11 @@ const dataObj = JSON.parse(data);
 
 const server = http.createServer((request, response) => {
     console.log(request.url);
+    console.log(url.parse(request.url, true)); // true - parse the query into an object
     
-    const pathName = request.url;
+    const {query, pathname: pathName} = url.parse(request.url, true);
+    console.log(query, pathName);
+    // const pathName = request.url;
     
     // Overview page
     if (pathName === '/' || pathName === '/overview') {
@@ -80,7 +83,14 @@ const server = http.createServer((request, response) => {
     
     // Product Page
     } else if (pathName === "/product") {
-        response.end("this is the product")
+        response.writeHead(200, { 'Content-type': 'text/html' });
+
+        const product = dataObj[query.id];
+
+        const output = replaceTemplate(templateProduct, product);
+        response.end(output);
+        // response.end("this is the product")
+        console.log(output);
 
     // API Page
     } else if (pathName === "/api") {
